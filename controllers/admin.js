@@ -4,6 +4,7 @@ exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
     path: '/admin/add-product',
+    editing: false,
     formsCSS: true,
     productCSS: true,
     activeAddProduct: true,
@@ -25,10 +26,17 @@ exports.getEditProduct = (req, res, next) => {
   if (!editMode) {
     return res.redirect('/')
   }
-  res.render('admin/edit-product', {
-    pageTitle: 'Edit Product',
-    path: '/admin/edit-product',
-    editing: editMode === 'true',
+  const prodId = req.params.productId
+  Product.findById(prodId, (product) => {
+    if (!product) return res.redirect('/')
+    console.log('product: ', product)
+
+    res.render('admin/edit-product', {
+      pageTitle: 'Edit Product',
+      path: '/admin/edit-product',
+      editing: editMode === 'true',
+      product,
+    })
   })
 }
 
