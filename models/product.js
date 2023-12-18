@@ -7,15 +7,18 @@ const p = path.join(dirName, 'data', 'products.json')
 const getProductsFromFile = (cb) => {
   fs.readFile(p, 'utf-8', (err, fileContent) => {
     if (err || fileContent === '') {
-      return cb([])
+      cb([])
     }
-    return cb(JSON.parse(fileContent))
+    cb(JSON.parse(fileContent))
   })
 }
 
 module.exports = class Product {
-  constructor(t) {
-    this.title = t
+  constructor(title, imageUrl, description, price) {
+    this.title = title
+    this.imageUrl = imageUrl
+    this.description = description
+    this.price = price
   }
 
   save() {
