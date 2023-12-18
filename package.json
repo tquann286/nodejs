@@ -12,11 +12,19 @@
   "author": "tquann286",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "8.44.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
     "nodemon": "^1.18.3"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
-    "express": "^4.18.2",
-    "ejs": "^2.6.1"
-  }
+    "ejs": "^2.6.1",
+    "express": "^4.18.2"
+  },
+  "repository": "https://github.com/tquann286/nodejs.git"
 }
