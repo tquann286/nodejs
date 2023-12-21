@@ -16,10 +16,16 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl
   const price = req.body.price
   const description = req.body.description
-  const product = new Product(null, title, imageUrl, description, price)
-  product
-    .save()
-    .then(() => res.redirect('/'))
+
+  Product.create({
+    title,
+    description,
+    imageUrl,
+    price,
+  })
+    .then(() => {
+      res.redirect('/')
+    })
     .catch((err) => console.log(err))
 }
 
@@ -29,16 +35,18 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/')
   }
   const prodId = req.params.productId
-  Product.findById(prodId).then(([[product]]) => {
-    if (!product) return res.redirect('/')
+  Product.findById(prodId)
+    .then(([[product]]) => {
+      if (!product) return res.redirect('/')
 
-    res.render('admin/edit-product', {
-      pageTitle: 'Edit Product',
-      path: '/admin/edit-product',
-      editing: editMode === 'true',
-      product,
+      res.render('admin/edit-product', {
+        pageTitle: 'Edit Product',
+        path: '/admin/edit-product',
+        editing: editMode === 'true',
+        product,
+      })
     })
-  }).catch((err) => console.log(err))
+    .catch((err) => console.log(err))
 }
 
 exports.postEditProduct = (req, res, next) => {
@@ -59,12 +67,14 @@ exports.postDeleteProduct = (req, res, next) => {
   if (!prodId) {
     return res.redirect('/')
   }
-  Product.findById(prodId).then(([[product]]) => {
-    if (!product) return res.redirect('/')
-    Product.deleteById(prodId)
+  Product.findById(prodId)
+    .then(([[product]]) => {
+      if (!product) return res.redirect('/')
+      Product.deleteById(prodId)
 
-    res.redirect('/admin/products')
-  }).catch((err) => console.log(err))
+      res.redirect('/admin/products')
+    })
+    .catch((err) => console.log(err))
 }
 
 exports.getProducts = (req, res, next) => {
