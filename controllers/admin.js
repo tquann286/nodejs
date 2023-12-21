@@ -78,11 +78,12 @@ exports.postDeleteProduct = (req, res, next) => {
   if (!prodId) {
     return res.redirect('/')
   }
-  Product.findById(prodId)
-    .then(([[product]]) => {
-      if (!product) return res.redirect('/')
-      Product.deleteById(prodId)
-
+  Product.destroy({
+    where: {
+      id: prodId,
+    },
+  })
+    .then(() => {
       res.redirect('/admin/products')
     })
     .catch((err) => console.log(err))
