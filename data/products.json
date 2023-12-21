@@ -1,1 +1,5 @@
-[{"id":"123","title":"A Booka","imageUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"This is anbook!","price":"19123"},{"id":"0.5775988545463449","title":"zqwqweqweqweqweczxc","imageUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"accascac","price":"2123123"},{"title":"zxcasca","imageUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"asasddas","price":"123231","id":"0.9384827182392439"}]
+[
+  { "id": "123", "title": "A Booka", "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg", "description": "This is anbook!", "price": "19123" },
+  { "id": "0.5775988545463449", "title": "zqwqweqweqweqweczxc", "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg", "description": "accascac", "price": "2123123" },
+  { "title": "zxcasca", "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg", "description": "asasddas", "price": "123231", "id": "0.9384827182392439" }
+]
