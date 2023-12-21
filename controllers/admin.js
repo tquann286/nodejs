@@ -16,13 +16,13 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl
   const price = req.body.price
   const description = req.body.description
-
-  Product.create({
-    title,
-    description,
-    imageUrl,
-    price,
-  })
+  req.user
+    .createProduct({
+      title,
+      description,
+      imageUrl,
+      price,
+    })
     .then(() => {
       res.redirect('/')
     })
