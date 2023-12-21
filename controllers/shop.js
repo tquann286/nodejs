@@ -8,7 +8,7 @@ exports.getProducts = (req, res, next) => {
       pageTitle: 'All Products',
       path: '/products',
     })
-  })
+  }).catch(err => console.log(err))
 }
 
 exports.getProduct = (req, res, next) => {
