@@ -3,23 +3,21 @@ const uri = 'mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.n
 
 let _db
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-})
-const mongoConnect = (cb) => {
-  client
-    .connect()
-    .then((result) => {
-      _db = result.db()
-      cb()
+const mongoConnect = (callback) => {
+  MongoClient.connect(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    },
+  })
+    .then((client) => {
+      console.log('Connected!')
+      _db = client.db()
+      callback()
     })
     .catch((err) => {
       console.log(err)
-      throw err
     })
 }
 
