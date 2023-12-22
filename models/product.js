@@ -13,9 +13,8 @@ class Product {
   save() {
     const db = getDb()
     let dbOp
-    const { _id, ...updatedProduct } = this
     if (this._id) {
-      dbOp = db.collection('products').updateOne({ _id: new ObjectId(this._id) }, { $set: updatedProduct  })
+      dbOp = db.collection('products').updateOne({ _id: this._id }, { $set: this })
     } else {
       dbOp = db.collection('products').insertOne(this)
     }
