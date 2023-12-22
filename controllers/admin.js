@@ -61,21 +61,17 @@ exports.postEditProduct = (req, res, next) => {
     .catch((err) => console.log(err))
 }
 
-// exports.postDeleteProduct = (req, res, next) => {
-//   const prodId = req.params.productId
-//   if (!prodId) {
-//     return res.redirect('/')
-//   }
-//   Product.destroy({
-//     where: {
-//       id: prodId,
-//     },
-//   })
-//     .then(() => {
-//       res.redirect('/admin/products')
-//     })
-//     .catch((err) => console.log(err))
-// }
+exports.postDeleteProduct = (req, res, next) => {
+  const prodId = req.params.productId
+  if (!prodId) {
+    return res.redirect('/')
+  }
+  Product.deleteById(prodId)
+    .then(() => {
+      res.redirect('/admin/products')
+    })
+    .catch((err) => console.log(err))
+}
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
