@@ -1,5 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb')
-const uri = 'mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.net/?retryWrites=true&w=majority'
+const uri = 'mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.net/shop?retryWrites=true&w=majority'
+
+let _db
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -12,9 +14,22 @@ const mongoConnect = (cb) => {
   client
     .connect()
     .then((result) => {
-      cb(result)
+      _db = result.db()
+      cb()
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      console.log(err)
+      throw err
+    })
 }
 
-module.exports = mongoConnect
+const getDb = () => {
+  if (_db) {
+    return _db
+  }
+
+  throw 'No database found!'
+}
+
+exports.mongoConnect = mongoConnect
+exports.getDb = getDb
