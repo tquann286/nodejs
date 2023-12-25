@@ -23,6 +23,16 @@ class User {
     return db.collection('users').findOne({ _id: new ObjectId(prodId) })
   }
 
+  getCart() {
+    const db = getDb()
+    const productIds = this.cart?.items?.map((item) => item?.productId)
+    return db
+      .collection('products')
+      .find({ _id: { $in: productIds } })
+      .toArray()
+      .then((products) => products?.map((p) => ({ ...p, quantity: this.cart.items.find((i) => i.productId.toString() === p._id.toString())?.quantity })))
+  }
+
   addToCart(product) {
     const cartProductIndex = this.cart?.items?.findIndex((cp) => cp.productId.toString() === product._id.toString())
     let newQuantity = 1

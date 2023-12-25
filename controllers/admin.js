@@ -18,10 +18,7 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description
   const product = new Product(title, price, description, imageUrl, null, req.user._id)
 
-  product
-    .save()
-    .then(() => console.log('result: ', result))
-    .catch((err) => console.log(err))
+  product.save().catch((err) => console.log(err))
 }
 
 exports.getEditProduct = (req, res, next) => {
