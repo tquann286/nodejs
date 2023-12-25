@@ -50,6 +50,12 @@ class User {
     const db = getDb()
     return db.collection('users').updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: updatedCart } })
   }
+
+  deleteCartItem(productId) {
+    const db = getDb()
+
+    return db.collection('users').updateOne({ _id: this._id }, { $pull: { 'cart.items': { productId: new ObjectId(productId) } } })
+  }
 }
 
 module.exports = User
