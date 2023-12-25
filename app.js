@@ -33,5 +33,6 @@ app.use(shopRoutes)
 app.use(errorController.get404)
 
 mongoConnect(() => {
+  console.log('http://localhost:3000/')
   app.listen(3000)
 })
