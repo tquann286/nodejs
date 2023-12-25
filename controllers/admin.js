@@ -60,7 +60,7 @@ exports.postDeleteProduct = (req, res, next) => {
   if (!prodId) {
     return res.redirect('/')
   }
-  Product.deleteById(prodId)
+  Product.findByIdAndDelete({ _id: prodId })
     .then(() => {
       res.redirect('/admin/products')
     })
