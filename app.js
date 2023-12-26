@@ -5,11 +5,18 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session)
 
 const errorController = require('./controllers/error')
 const User = require('./models/user')
 
+const MONGODB_URI = 'mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.net/shop?retryWrites=true&w=majority'
+
 const app = express()
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions',
+})
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
@@ -18,11 +25,10 @@ const adminRoutes = require('./routes/admin')
 const authRoutes = require('./routes/auth')
 const shopRoutes = require('./routes/shop')
 
-
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(cookieParser())
-app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false }))
+app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false, store }))
 
 app.use((req, res, next) => {
   req.isLoggedIn = req.session.loggedIn
@@ -41,7 +47,7 @@ app.use(authRoutes)
 app.use(errorController.get404)
 
 mongoose
-  .connect('mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.net/shop?retryWrites=true&w=majority')
+  .connect(MONGODB_URI)
   .then(() => {
     return User.findOne().then((user) => {
       if (!user) {
