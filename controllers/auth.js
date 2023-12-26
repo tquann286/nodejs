@@ -34,22 +34,22 @@ exports.postSignup = (req, res, next) => {
   const password = req.body.password
   const confirmPassword = req.body.confirmPassword
 
-  User.findOne({ email: email })
-    .then((userDoc) => {
-      if (userDoc) {
-        return res.redirect('/signup')
-      }
+  User.findOne({ email: email }).then((userDoc) => {
+    if (userDoc) {
+      return res.redirect('/signup')
+    }
 
-      return bcrypt.hash(password, 12)
-    })
-    .then((hashedPassword) => {
-      const user = new User({ email, password: hashedPassword, cart: { items: [] } })
+    return bcrypt
+      .hash(password, 12)
+      .then((hashedPassword) => {
+        const user = new User({ email, password: hashedPassword, cart: { items: [] } })
 
-      return user.save()
-    })
-    .then(() => {
-      res.redirect('/login')
-    })
+        return user.save()
+      })
+      .then(() => {
+        res.redirect('/login')
+      })
+  })
 }
 
 exports.postLogout = (req, res, next) => {
