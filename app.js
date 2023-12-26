@@ -25,7 +25,7 @@ app.use(cookieParser())
 app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false }))
 
 app.use((req, res, next) => {
-  req.isLoggedIn = req.cookies.loggedIn === 'true'
+  req.isLoggedIn = req.session.loggedIn
   User.findById('65897f5010e884d405bae320')
     .then((user) => {
       req.user = user
