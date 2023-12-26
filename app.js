@@ -51,17 +51,6 @@ app.use(errorController.get404)
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    return User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({ name: 'John', email: 'test', cart: { items: [] } })
-
-        return user.save()
-      }
-
-      return Promise.resolve()
-    })
-  })
-  .then(() => {
     console.log('http://localhost:3000/')
     app.listen(3000)
   })
