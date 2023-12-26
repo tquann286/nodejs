@@ -31,8 +31,10 @@ app.use(cookieParser())
 app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false, store }))
 
 app.use((req, res, next) => {
-  req.isLoggedIn = req.session.loggedIn
-  User.findById('65897f5010e884d405bae320')
+  if (!req.session.user) {
+    return next()
+  }
+  User.findById(req.session.user._id)
     .then((user) => {
       req.user = user
       next()
