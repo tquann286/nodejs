@@ -47,7 +47,6 @@ exports.getCart = (req, res, next) => {
     .populate('cart.items.productId')
     .then((user) => {
       const products = user?.cart?.items
-      console.log('products: ', products)
 
       res.render('shop/cart', {
         path: '/cart',
@@ -103,7 +102,6 @@ exports.postOrder = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id }).then((orders) => {
-    console.log('orders: ', orders)
     res.render('shop/orders', {
       path: '/orders',
       pageTitle: 'Your Orders',
