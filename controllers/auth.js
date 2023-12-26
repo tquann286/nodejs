@@ -7,6 +7,12 @@ exports.getLogin = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {
-  req.session.loggedIn = true;
+  req.session.loggedIn = true
   res.redirect('/')
+}
+
+exports.postLogout = (req, res, next) => {
+  req.session.destroy(() => {
+    res.redirect('/')
+  })
 }
