@@ -28,7 +28,14 @@ const shopRoutes = require('./routes/shop')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(cookieParser())
-app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false, store }))
+app.use(
+  session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+    store,
+  })
+)
 
 app.use((req, res, next) => {
   if (!req.session.user) {

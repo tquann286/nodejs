@@ -18,20 +18,23 @@ exports.postLogin = (req, res, next) => {
         return res.redirect('/login')
       }
 
-      bcrypt.compare(password, user.password).then((doMatch) => {
-        if (doMatch) {
-          req.session.isLoggedIn = true
-          req.session.user = user
-          return req.session.save(() => {
-            res.redirect('/')
-          })
-        }
+      bcrypt
+        .compare(password, user.password)
+        .then((doMatch) => {
+          if (doMatch) {
+            req.session.isLoggedIn = true
+            req.session.user = user
+            return req.session.save(() => {
+              res.redirect('/')
+            })
+          }
 
-        res.redirect('/login')
-      }).catch((err) => {
-        console.log('err: ', err)
-        res.redirect('/login')
-      })
+          res.redirect('/login')
+        })
+        .catch((err) => {
+          console.log('err: ', err)
+          res.redirect('/login')
+        })
     })
     .catch((err) => console.log(err))
 }
@@ -45,11 +48,11 @@ exports.getSignup = (req, res, next) => {
 }
 
 exports.postSignup = (req, res, next) => {
-  const email = req.body.email
-  const password = req.body.password
-  const confirmPassword = req.body.confirmPassword
+  const { email } = req.body
+  const { password } = req.body
+  const { confirmPassword } = req.body
 
-  User.findOne({ email: email }).then((userDoc) => {
+  User.findOne({ email }).then((userDoc) => {
     if (userDoc) {
       return res.redirect('/signup')
     }
@@ -57,7 +60,11 @@ exports.postSignup = (req, res, next) => {
     return bcrypt
       .hash(password, 12)
       .then((hashedPassword) => {
-        const user = new User({ email, password: hashedPassword, cart: { items: [] } })
+        const user = new User({
+          email,
+          password: hashedPassword,
+          cart: { items: [] },
+        })
 
         return user.save()
       })

@@ -8,16 +8,22 @@ exports.getAddProduct = (req, res, next) => {
     formsCSS: true,
     productCSS: true,
     activeAddProduct: true,
-    isAuthenticated: req.session.isLoggedIn
+    isAuthenticated: req.session.isLoggedIn,
   })
 }
 
 exports.postAddProduct = (req, res, next) => {
-  const title = req.body.title
-  const imageUrl = req.body.imageUrl
-  const price = req.body.price
-  const description = req.body.description
-  const product = new Product({ title, price, description, imageUrl, userId: req.user })
+  const { title } = req.body
+  const { imageUrl } = req.body
+  const { price } = req.body
+  const { description } = req.body
+  const product = new Product({
+    title,
+    price,
+    description,
+    imageUrl,
+    userId: req.user,
+  })
 
   product
     .save()
@@ -40,7 +46,7 @@ exports.getEditProduct = (req, res, next) => {
         path: '/admin/edit-product',
         editing: editMode === 'true',
         product,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
       })
     })
     .catch((err) => console.log(err))
@@ -74,7 +80,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: 'Admin Products',
         path: '/admin/products',
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
       })
     })
     .catch((err) => console.log(err))
