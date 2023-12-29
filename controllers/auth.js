@@ -16,7 +16,6 @@ exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: req.session.isLoggedIn,
     errorMessage: req.flash('error'),
   })
 }
@@ -56,7 +55,6 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    isAuthenticated: false,
   })
 }
 
@@ -96,5 +94,13 @@ exports.postSignup = (req, res, next) => {
 exports.postLogout = (req, res, next) => {
   req.session.destroy(() => {
     res.redirect('/')
+  })
+}
+
+exports.getReset = (req, res, next) => {
+  res.render('auth/reset', {
+    path: '/reset',
+    pageTitle: 'Reset Password',
+    errorMessage: req.flash('error'),
   })
 }
