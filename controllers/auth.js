@@ -119,22 +119,26 @@ exports.postReset = (req, res, next) => {
           req.flash('error', 'No account with that email found.')
           return res.redirect('/reset')
         }
-
         user.resetToken = token
         user.resetTokenExpiration = Date.now() + 3600000
         return user.save()
       })
-      .then(() => {
-        res.redirect('/')
-        transporter.sendMail({
-          to: req.body.email,
-          from: 'quantrung@gmail.com',
-          subject: 'Password reset',
-          html: `
-            <p>You requested a password reset</p>
-            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
-          `,
-        })
+      .then((result) => {
+        if (result) {
+          res.redirect('/')
+          transporter.sendMail({
+            to: req.body.email,
+            from: 'shop@node-complete.com',
+            subject: 'Password reset',
+            html: `
+                    <p>You requested a password reset</p>
+                    <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+                  `,
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
       })
   })
 }
