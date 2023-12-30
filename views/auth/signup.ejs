@@ -7,6 +7,7 @@
    <%- include('../includes/navigation.ejs') %>
 
     <main>
+        <div><%= errorMessage %></div>
         <form class="login-form" action="/signup" method="POST" novalidate>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-control">
