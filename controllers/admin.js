@@ -11,7 +11,7 @@ exports.getAddProduct = (req, res, next) => {
     activeAddProduct: true,
     hasError: false,
     errorMessage: null,
-    validationErrors: []
+    validationErrors: [],
   })
 }
 
@@ -50,7 +50,13 @@ exports.postAddProduct = (req, res, next) => {
   product
     .save()
     .then(() => res.redirect('/admin/products'))
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      return res.status(500).render('500', {
+        pageTitle: 'Error',
+        path: '/500',
+        isAuthenticated: req.isLoggedIn,
+      })
+    })
 }
 
 exports.getEditProduct = (req, res, next) => {
@@ -70,7 +76,7 @@ exports.getEditProduct = (req, res, next) => {
         product,
         hasError: false,
         errorMessage: null,
-        validationErrors: []
+        validationErrors: [],
       })
     })
     .catch((err) => console.log(err))
