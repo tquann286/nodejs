@@ -57,6 +57,11 @@ exports.getSignup = (req, res, next) => {
     path: '/signup',
     pageTitle: 'Signup',
     errorMessage: '',
+    oldInput: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
   })
 }
 
@@ -72,35 +77,34 @@ exports.postSignup = (req, res, next) => {
       path: '/signup',
       pageTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email,
+        password,
+        confirmPassword,
+      },
     })
   }
 
-  User.findOne({ email }).then((userDoc) => {
-    if (userDoc) {
-      return res.redirect('/signup')
-    }
-
-    return bcrypt
-      .hash(password, 12)
-      .then((hashedPassword) => {
-        const user = new User({
-          email,
-          password: hashedPassword,
-          cart: { items: [] },
-        })
-
-        return user.save()
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const user = new User({
+        email,
+        password: hashedPassword,
+        cart: { items: [] },
       })
-      .then(() => {
-        res.redirect('/login')
-        transporter.sendMail({
-          to: email,
-          from: 'quantrung@gmail.com',
-          subject: 'Signup succeeded!',
-          html: '<h1>You successfully signed up!</h1>',
-        })
+
+      return user.save()
+    })
+    .then(() => {
+      res.redirect('/login')
+      transporter.sendMail({
+        to: email,
+        from: 'quantrung@gmail.com',
+        subject: 'Signup succeeded!',
+        html: '<h1>You successfully signed up!</h1>',
       })
-  })
+    })
 }
 
 exports.postLogout = (req, res, next) => {
