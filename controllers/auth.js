@@ -45,7 +45,6 @@ exports.postLogin = (req, res, next) => {
           res.redirect('/login')
         })
         .catch((err) => {
-          console.log('err: ', err)
           res.redirect('/login')
         })
     })
@@ -111,7 +110,6 @@ exports.postReset = (req, res, next) => {
     if (err) {
       return res.redirect('/reset')
     }
-
     const token = buffer.toString('hex')
     User.findOne({ email: req.body.email })
       .then((user) => {
@@ -140,5 +138,20 @@ exports.postReset = (req, res, next) => {
       .catch((err) => {
         console.log(err)
       })
+  })
+}
+
+exports.getNewPassword = (req, res, next) => {
+  const { token } = req.params
+  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }).then((user) => {
+    if (!user) {
+      return res.redirect('/login')
+    }
+    res.render('auth/new-password', {
+      path: '/new-password',
+      pageTitle: 'New Password',
+      errorMessage: req.flash('error'),
+      userId: user._id.toString(),
+    })
   })
 }
