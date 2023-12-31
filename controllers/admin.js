@@ -17,7 +17,7 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { title } = req.body
-  const { imageUrl } = req.body
+  const { image } = req.body
   const { price } = req.body
   const { description } = req.body
   const errors = validationResult(req)
@@ -30,7 +30,7 @@ exports.postAddProduct = (req, res, next) => {
       hasError: true,
       product: {
         title,
-        imageUrl,
+        image,
         price,
         description,
       },
