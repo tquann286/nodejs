@@ -17,7 +17,8 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { title } = req.body
-  const { image } = req.body
+  const image = req.file
+  console.log('image: ', image)
   const { price } = req.body
   const { description } = req.body
   const errors = validationResult(req)
@@ -43,7 +44,7 @@ exports.postAddProduct = (req, res, next) => {
     title,
     price,
     description,
-    imageUrl,
+    image,
     userId: req.user,
   })
 
