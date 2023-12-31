@@ -18,7 +18,7 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
   const { title } = req.body
   const image = req.file
-  console.log('image: ', image)
+  const imageUrl = image ? image.path : null
   const { price } = req.body
   const { description } = req.body
   const errors = validationResult(req)
@@ -31,7 +31,7 @@ exports.postAddProduct = (req, res, next) => {
       hasError: true,
       product: {
         title,
-        image,
+        imageUrl,
         price,
         description,
       },
@@ -44,7 +44,7 @@ exports.postAddProduct = (req, res, next) => {
     title,
     price,
     description,
-    image,
+    imageUrl,
     userId: req.user,
   })
 
@@ -55,7 +55,6 @@ exports.postAddProduct = (req, res, next) => {
       return res.status(500).render('500', {
         pageTitle: 'Error',
         path: '/500',
-        isAuthenticated: req.isLoggedIn,
       })
     })
 }
@@ -84,7 +83,9 @@ exports.getEditProduct = (req, res, next) => {
 }
 
 exports.postEditProduct = (req, res, next) => {
-  const { productId, title, imageUrl, price, description } = req.body
+  const { productId, title, price, description } = req.body
+  const image = req.file
+  const imageUrl = image ? image.path : null
 
   const errors = validationResult(req)
 
