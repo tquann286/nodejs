@@ -40,16 +40,30 @@ exports.getProduct = (req, res, next) => {
 
 exports.getIndex = (req, res, next) => {
   const page = req.query.page || 1
-  Product.find()
-  .skip((page - 1) * ITEMS_PER_PAGE)
-  .limit(ITEMS_PER_PAGE)
-  .then((products) => {
-    res.render('shop/index', {
-      prods: products || [],
-      pageTitle: 'Shop',
-      path: '/',
+  let totalItems = 0
+  let totalPages = 0
+  Product.countDocuments()
+    .then((numProducts) => {
+      totalItems = numProducts
+      totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
+
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE)
     })
-  })
+    .then((products) => {
+      res.render('shop/index', {
+        prods: products || [],
+        pageTitle: 'Shop',
+        path: '/',
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: totalPages,
+      })
+    })
 }
 
 exports.getCart = (req, res, next) => {
@@ -150,11 +164,7 @@ exports.getInvoice = (req, res, next) => {
       let totalPrice = 0
       order.products.forEach((prod) => {
         totalPrice += prod.quantity * prod.product.price
-        pdfDoc
-          .fontSize(14)
-          .text(
-            `${prod.product.title} - ${prod.quantity} x $${prod.product.price}`
-          )
+        pdfDoc.fontSize(14).text(`${prod.product.title} - ${prod.quantity} x $${prod.product.price}`)
       })
 
       pdfDoc.text('---')
