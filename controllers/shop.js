@@ -39,7 +39,7 @@ exports.getProduct = (req, res, next) => {
 }
 
 exports.getIndex = (req, res, next) => {
-  const page = req.query.page || 1
+  const page = +req.query.page || 1
   let totalItems = 0
   let totalPages = 0
   Product.countDocuments()
