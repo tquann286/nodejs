@@ -23,8 +23,10 @@ router.get('/orders', isAuth, shopController.getOrders)
 
 router.get('/checkout', isAuth, shopController.getCheckout)
 
-router.get('/orders/:orderId', isAuth, shopController.getInvoice)
+router.get('/checkout/success', isAuth, shopController.getCheckoutSuccess)
 
-router.post('/create-order', isAuth, shopController.postOrder)
+router.get('/checkout/cancel', isAuth, shopController.getCheckout)
+
+router.get('/orders/:orderId', isAuth, shopController.getInvoice)
 
 module.exports = router

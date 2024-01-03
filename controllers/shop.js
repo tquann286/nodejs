@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const stripe = require('stripe')('sk_test_51KKi1ZB7lOEqEur98fjSD8R08BAPLQMUj52IAuMJAPwM6cgeSTiDbzuEoVHXL7XSWGmV8vDSOykK4ln4IURmYO28002RqrbgJQ')
 
 const PDFDocument = require('pdfkit')
 
@@ -116,23 +117,50 @@ exports.postCartDeleteProduct = (req, res, next) => {
 }
 
 exports.getCheckout = (req, res, next) => {
+  let products
+  let total = 0
+
   req.user
     .populate('cart.items.productId')
     .then((user) => {
-      const products = user?.cart?.items
+      products = user?.cart?.items
+      total = products?.reduce((acc, curr) => acc + curr.quantity * curr.productId.price, 0)
 
+      return stripe.checkout.sessions.create({
+        line_items: products.map((p) => {
+          return {
+            price_data: {
+              currency: 'vnd',
+              unit_amount: parseInt(p.productId.price),
+              product_data: {
+                name: p.productId.title,
+                description: p.productId.description,
+              },
+            },
+            quantity: p.quantity,
+          }
+        }),
+
+        mode: 'payment',
+
+        success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000,
+
+        cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel',
+      })
+    })
+    .then((session) => {
       res.render('shop/checkout', {
         path: '/checkout',
         pageTitle: 'Checkout',
         products: products,
-        totalSum: products?.reduce((acc, curr) => acc + curr.quantity * curr.productId.price, 0),
+        totalSum: total,
+        sessionId: session.id,
       })
     })
     .catch((err) => console.log(err))
-  
 }
 
-exports.postOrder = (req, res, next) => {
+exports.getCheckoutSuccess = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
     .then((user) => {
