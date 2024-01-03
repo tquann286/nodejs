@@ -115,6 +115,23 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .catch((err) => console.log(err))
 }
 
+exports.getCheckout = (req, res, next) => {
+  req.user
+    .populate('cart.items.productId')
+    .then((user) => {
+      const products = user?.cart?.items
+
+      res.render('shop/checkout', {
+        path: '/checkout',
+        pageTitle: 'Checkout',
+        products: products,
+        totalSum: products?.reduce((acc, curr) => acc + curr.quantity * curr.productId.price, 0),
+      })
+    })
+    .catch((err) => console.log(err))
+  
+}
+
 exports.postOrder = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
