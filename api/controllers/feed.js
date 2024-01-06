@@ -27,12 +27,19 @@ exports.createPost = (req, res, next) => {
     throw error
   }
 
+  if (!req.file) {
+    const error = new Error('No image provided.')
+    error.statusCode = 422
+    throw error
+  }
+
+  const imageUrl = req.file.path
   const title = req.body.title
   const content = req.body.content
   const post = new Post({
-    title: title,
-    content: content,
-    imageUrl: 'images/duck.jpg',
+    title,
+    content,
+    imageUrl,
     creator: { name: 'Quantrung' },
   })
 
@@ -63,6 +70,7 @@ exports.getPost = (req, res, next) => {
         error.statusCode = 404
         throw error
       }
+      post.imageUrl = post.imageUrl.replace(/\\/g, "/");
       res.status(200).json({ message: 'Post fetched.', post: post })
     })
     .catch((err) => {
