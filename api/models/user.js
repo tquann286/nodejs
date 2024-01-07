@@ -5,7 +5,7 @@ const userSchema = new Schema({
   email: { type: String, required: true },
   name: { type: String, required: true },
   password: { type: String, require: true },
-  status: { type: String, require: true },
+  status: { type: String, require: true, default: 'I am new!' },
   posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
 })
 

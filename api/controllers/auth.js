@@ -1,4 +1,18 @@
+const bcrypt = require('bcryptjs')
+
+const User = require('../models/user')
+const { validationResult } = require('express-validator')
+
 exports.signup = (req, res, next) => {
+  const error = validationResult(req)
+
+  if (!error.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = error.array()
+    throw error
+  }
+
   const email = req.body.email
   const password = req.body.password
   const name = req.body.name
@@ -8,6 +22,7 @@ exports.signup = (req, res, next) => {
       if (userDoc) {
         const error = new Error('Email address already exists!')
         error.statusCode = 422
+        error.data = [{ param: 'email', msg: 'Email address already exists!' }]
         throw error
       }
 
