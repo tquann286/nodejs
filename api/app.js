@@ -49,11 +49,16 @@ app.use((error, req, res, next) => {
 mongoose
   .connect('mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.net/messages?retryWrites=true&w=majority')
   .then(() => {
-    console.log('http://localhost:8080/')
-    app.listen(8080)
-    const io = require('socket.io')(server)
+    const server = app.listen(8080)
+    const io = require('socket.io')(server, {
+      cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+      },
+    })
+
     io.on('connection', (socket) => {
-      console.log('Client connected!')
+      console.log('a user connected')
     })
   })
   .catch((err) => console.log(err))
