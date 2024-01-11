@@ -4,9 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const multer = require('multer')
-
-const feedRoutes = require('./routes/feed')
-const authRoutes = require('./routes/auth')
+const { graphqlHTTP } = require('express-graphql')
 
 const app = express()
 
@@ -35,8 +33,13 @@ app.use(cors())
 
 app.use(express.json())
 
-app.use('/feed', feedRoutes)
-app.use('/auth', authRoutes)
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema: require('./graphql/schema'),
+    rootValue: require('./graphql/resolvers'),
+  })
+)
 
 app.use((error, req, res, next) => {
   console.log('error: ', error)
@@ -49,11 +52,13 @@ app.use((error, req, res, next) => {
 mongoose
   .connect('mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.net/messages?retryWrites=true&w=majority')
   .then(() => {
-    const server = app.listen(8080)
-    const io = require('./socket').init(server)
+    // const server = app.listen(8080)
+    // const io = require('./socket').init(server)
 
-    io.on('connection', (socket) => {
-      console.log('a user connected')
-    })
+    // io.on('connection', (socket) => {
+    //   console.log('a user connected')
+    // })
+
+    app.listen(8080)
   })
   .catch((err) => console.log(err))
