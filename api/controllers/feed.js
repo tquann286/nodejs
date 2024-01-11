@@ -3,6 +3,7 @@ const path = require('path')
 
 const { validationResult } = require('express-validator')
 
+const io = require('../socket')
 const Post = require('../models/post')
 const User = require('../models/user')
 
@@ -11,7 +12,8 @@ exports.getPosts = async (req, res, next) => {
   const perPage = 2
   try {
     const totalItems = await Post.countDocuments()
-    const posts = await Post.find().populate('creator')
+    const posts = await Post.find()
+      .populate('creator')
       .skip((currentPage - 1) * perPage)
       .limit(perPage)
 
@@ -66,6 +68,10 @@ exports.createPost = (req, res, next) => {
       return user.save()
     })
     .then(() => {
+      io.getIO().emit('posts', {
+        action: 'create',
+        post: { ...post._doc, creator: { _id: req.userId, name: creator.name } },
+      })
       res.status(201).json({
         message: 'Post created successfully!',
         post: post,
