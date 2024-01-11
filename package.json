@@ -52,7 +52,8 @@
     "socket.io": "^4.7.3",
     "stripe": "^14.10.0",
     "uuid": "^9.0.1",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "validator": "^13.11.0"
   },
   "repository": "https://github.com/tquann286/nodejs.git"
 }
