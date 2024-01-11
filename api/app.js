@@ -50,12 +50,7 @@ mongoose
   .connect('mongodb+srv://quantrung286:Trungquan2806@cluster0.uknlqmo.mongodb.net/messages?retryWrites=true&w=majority')
   .then(() => {
     const server = app.listen(8080)
-    const io = require('socket.io')(server, {
-      cors: {
-        origin: 'http://localhost:3000',
-        methods: ['GET', 'POST'],
-      },
-    })
+    const io = require('./socket').init(server)
 
     io.on('connection', (socket) => {
       console.log('a user connected')
