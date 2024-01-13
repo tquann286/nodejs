@@ -72,44 +72,36 @@ module.exports = {
       error.code = 401
       throw error
     }
-
-    const { title, content, imageUrl } = postInput
     const errors = []
-    if (validator.isEmpty(title) || !validator.isLength(title, { min: 5 })) {
+    if (validator.isEmpty(postInput.title) || !validator.isLength(postInput.title, { min: 5 })) {
       errors.push({ message: 'Title is invalid.' })
     }
-    if (validator.isEmpty(content) || !validator.isLength(content, { min: 5 })) {
+    if (validator.isEmpty(postInput.content) || !validator.isLength(postInput.content, { min: 5 })) {
       errors.push({ message: 'Content is invalid.' })
     }
-    if (validator.isEmpty(imageUrl)) {
-      errors.push({ message: 'ImageUrl is invalid.' })
-    }
-
     if (errors.length > 0) {
       const error = new Error('Invalid input.')
       error.data = errors
       error.code = 422
       throw error
     }
-
     const user = await User.findById(req.userId)
-
     if (!user) {
       const error = new Error('Invalid user.')
       error.code = 401
       throw error
     }
-
     const post = new Post({
-      title,
-      content,
-      imageUrl,
-      creator: req.userId,
+      title: postInput.title,
+      content: postInput.content,
+      imageUrl: postInput.imageUrl,
+      creator: user,
     })
 
     const createdPost = await post.save()
     user.posts.push(createdPost)
 
+    await user.save()
     return {
       ...createdPost._doc,
       _id: createdPost._id.toString(),
