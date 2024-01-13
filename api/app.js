@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const { graphqlHTTP } = require('express-graphql')
+const auth = require('./middleware/auth')
 
 const app = express()
 
@@ -32,6 +33,8 @@ app.use('/api/images', express.static(path.join(__dirname, 'images')))
 app.use(cors())
 
 app.use(express.json())
+
+app.use(auth)
 
 app.use(
   '/graphql',

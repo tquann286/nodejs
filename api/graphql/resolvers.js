@@ -67,6 +67,12 @@ module.exports = {
     return { token, userId: user._id.toString() }
   },
   createPost: async function ({ postInput }, req) {
+    if (!req.isAuth) {
+      const error = new Error('Not authenticated!')
+      error.code = 401
+      throw error
+    }
+
     const { title, content, imageUrl } = postInput
     const errors = []
     if (validator.isEmpty(title) || !validator.isLength(title, { min: 5 })) {
@@ -86,13 +92,23 @@ module.exports = {
       throw error
     }
 
+    const user = await User.findById(req.userId)
+
+    if (!user) {
+      const error = new Error('Invalid user.')
+      error.code = 401
+      throw error
+    }
+
     const post = new Post({
       title,
       content,
       imageUrl,
+      creator: req.userId,
     })
 
     const createdPost = await post.save()
+    user.posts.push(createdPost)
 
     return {
       ...createdPost._doc,
