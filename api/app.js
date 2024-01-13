@@ -40,6 +40,7 @@ app.use(
     rootValue: require('./graphql/resolvers'),
     graphiql: true,
     customFormatErrorFn(err) {
+      console.log('err: ', err)
       if (!err.originalError) {
         return err
       }
@@ -68,7 +69,7 @@ mongoose
     // io.on('connection', (socket) => {
     //   console.log('a user connected')
     // })
-
+    console.log('http://localhost:8080')
     app.listen(8080)
   })
   .catch((err) => console.log(err))
