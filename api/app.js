@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const cors = require('cors')
@@ -35,6 +36,20 @@ app.use(cors())
 app.use(express.json())
 
 app.use(auth)
+
+app.put('/post-image', (req, res, next) => {
+  if (!req.isAuth) {
+    throw new Error('Not authenticated!')
+  }
+
+  if (!req.file) {
+    return res.status(200).json({ message: 'No file provided!' })
+  }
+  if (req.body.oldPath) {
+    clearImage(decodeURIComponent(req.body.oldPath))
+  }
+  return res.status(201).json({ message: 'File stored.', filePath: req.file.path })
+})
 
 app.use(
   '/graphql',
@@ -76,3 +91,9 @@ mongoose
     app.listen(8080)
   })
   .catch((err) => console.log(err))
+
+const clearImage = (filePath) => {
+  filePath = path.join(__dirname, '..', filePath)
+  console.log('filePath: ', filePath)
+  fs.unlink(filePath, (err) => console.log(err))
+}
