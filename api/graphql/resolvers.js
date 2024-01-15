@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
+const path = require('path')
 
 const User = require('../models/user')
 const Post = require('../models/post')
@@ -198,4 +200,34 @@ module.exports = {
       updatedAt: updatedPost.updatedAt.toISOString(),
     }
   },
+  deletePost: async function ({ id }, req) {
+    if (!req.isAuth) {
+      const error = new Error('Not authenticated!')
+      error.code = 401
+      throw error
+    }
+    const post = await Post.findById(id)
+    if (!post) {
+      const error = new Error('No post found!')
+      error.code = 404
+      throw error
+    }
+    if (post.creator.toString() !== req.userId.toString()) {
+      const error = new Error('Not authorized!')
+      error.code = 403
+      throw error
+    }
+    clearImage(post.imageUrl)
+    await Post.deleteOne({ _id: id })
+    const user = await User.findById(req.userId)
+    user.posts.pull(id)
+    await user.save()
+    return true
+  },
+}
+
+const clearImage = (filePath) => {
+  filePath = path.join(__dirname, '..', '..', filePath)
+  console.log('filePath: ', filePath)
+  fs.unlink(filePath, (err) => console.log(err))
 }
