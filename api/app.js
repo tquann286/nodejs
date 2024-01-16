@@ -7,6 +7,8 @@ const mongoose = require('mongoose')
 const multer = require('multer')
 const { graphqlHTTP } = require('express-graphql')
 const auth = require('./middleware/auth')
+const helmet = require('helmet')
+const compression = require('compression')
 
 const app = express()
 
@@ -32,7 +34,8 @@ app.use(multer({ storage: fileStorage, fileFilter }).single('image'))
 app.use('/api/images', express.static(path.join(__dirname, 'images')))
 
 app.use(cors())
-
+app.use(helmet())
+app.use(compression())
 app.use(express.json())
 
 app.use(auth)
