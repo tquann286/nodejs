@@ -62,6 +62,7 @@ describe('Auth Controller', () => {
           .then(() => {
             expect(res.statusCode).to.be.equal(200)
             expect(res.userStatus).to.be.equal('I am new!')
+            User.deleteMany({})
             done()
           })
           .catch((err) => {
