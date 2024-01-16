@@ -17,4 +17,14 @@ describe('Auth middleware', () => {
     }
     expect(authMiddleware.bind(this, req, {}, () => {})).to.throw()
   })
+
+  it('should yield a userId after decoding the token', async () => {
+    const { expect } = await import('chai')
+    const req = {
+      get: () => 'Bearer zxc',
+    }
+
+    authMiddleware(req, {}, () => {})
+    expect(req).to.have.property('userId')
+  })
 })
