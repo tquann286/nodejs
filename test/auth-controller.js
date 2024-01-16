@@ -10,7 +10,18 @@ describe('Auth Controller', () => {
     sinon.stub(User, 'findOne')
     User.findOne.throws()
 
-    expect(AuthController.login).to.throw('500')
+    const req = {
+      body: {
+        email: 'test@test.com',
+        password: 'tester',
+      },
+    }
+
+    AuthController.postLogin(req, {}, () => {}).then((result) => {
+      expect(result).to.be.an('error')
+      expect(result).to.have.property('statusCode', 500)
+      done()
+    })
 
     User.findOne.restore()
     done()

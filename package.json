@@ -4,9 +4,9 @@
   "description": "Complete Node.js Guide",
   "main": "app.js",
   "scripts": {
-    "test": "mocha",
-    "start": "nodemon .app.js",
-    "dev": "nodemon .app.js",
+    "test": "mocha ./api/test/*.js",
+    "start": "nodemon ./api/app.js",
+    "dev": "nodemon ./api/app.js",
     "lint": "eslint .",
     "start-server": "node app.js"
   },
