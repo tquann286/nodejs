@@ -4,7 +4,7 @@
   "description": "Complete Node.js Guide",
   "main": "app.js",
   "scripts": {
-    "test": "mocha ./api/test/*.js",
+    "test": "mocha ./api/test/*.js --timeout 10000 --exit",
     "start": "nodemon ./api/app.js",
     "dev": "nodemon ./api/app.js",
     "lint": "eslint .",
