@@ -1,11 +1,20 @@
+const { describe } = require('mocha')
 const authMiddleware = require('../middleware/is-auth')
 
-it('should throw an error if no authorization header is present', async () => {
-  const { expect } = await import('chai')
-  const req = {
-    session: {
-      isLoggedIn: false,
-    },
-  }
-  expect(authMiddleware.bind(this, req, { redirect: () => {} }, () => {})).to.throw('Not authenticated.')
+describe('Auth middleware', () => {
+  it('should throw an error if no authorization header is present', async () => {
+    const { expect } = await import('chai')
+    const req = {
+      get: () => null,
+    }
+    expect(authMiddleware.bind(this, req, {}, () => {})).to.throw('Not authenticated.')
+  })
+
+  it('should throw an error if the authorization header is only one string', async () => {
+    const { expect } = await import('chai')
+    const req = {
+      get: () => 'xyz',
+    }
+    expect(authMiddleware.bind(this, req, {}, () => {})).to.throw()
+  })
 })
